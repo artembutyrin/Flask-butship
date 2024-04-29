@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .social-icons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-icons img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>ButShip Fashion</h1>
+    <nav>
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/profile">Профиль</a></li>
+            <li><a href="/cart">Корзина</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h1>Информация о нас</h1>
+        <p>{{ about_text }}</p>
+    </div>
+    <div class="social-icons">
+        <a href="https://vk.com/prropaganda">
+            <img src="{{ url_for('static', filename='icons/vk.png') }}" alt="VK">
+            Артем Бутырин VK
+        </a>
+        <a href="https://vk.com/54l_evgeny_shipilov_l54">
+            <img src="{{ url_for('static', filename='icons/vk.png') }}" alt="VK">
+            Евгений Шипилов VK
+        </a>
+    </div>
+</main>
+</body>
+</html>

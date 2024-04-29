@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ButShip Fashion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+            height: 10vh;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-right: 10px;
+        }
+
+        nav ul li:last-child {
+            margin-right: 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        #categories {
+            text-align: center;
+            display: none;
+            position: absolute;
+            background-color: #333;
+            z-index: 1;
+            border-radius: 5px;
+            padding: 10px;
+            width: 150px;
+        }
+
+        #categories a {
+            display: block;
+            padding: 10px 0;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .category-button {
+            position: relative;
+        }
+
+        .category-button:hover #categories {
+            display: block;
+        }
+
+        .product {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .product img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .product h3 {
+            margin-top: 0;
+        }
+
+        .product p {
+            margin-bottom: 10px;
+        }
+
+        .product button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .product button:hover {
+            background-color: #555;
+        }
+
+        #advertisement,
+        #recommendations {
+            padding: 20px;
+            background-color: #ddd;
+            margin-top: 20px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #advertisement img,
+        #recommendations img {
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            transition: transform 0.5s ease;
+        }
+
+        #advertisement img:hover,
+        #recommendations img:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes slide {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .slides {
+            display: flex;
+            animation: slide 10s infinite alternate;
+        }
+
+        .slide {
+            min-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>ButShip Fashion</h1>
+        <nav>
+            <ul>
+                <li>
+                    <a href="/profile">Профиль</a>
+                </li>
+                <li>
+                    <a href="/">Главная</a>
+                </li>
+                {% if 'username' in request.cookies %}
+                <li><a href="/logout">Выйти</a></li>
+                {% else %}
+                <li><a href="/login">Войти</a></li>
+                <li><a href="/register">Регистрация</a></li>
+                {% endif %}
+                <li><a href="/cart">Корзина</a></li>
+                <li class="category-button">
+                    <a href="#">Категории</a>
+                    <div id="categories">
+                        <a href="/products?category=Shoes">Обувь</a>
+                        <a href="/products?category=Clothes">Одежда</a>
+                        <a href="/products?category=Accessories">Аксессуары</a>
+                    </div>
+                </li>
+                <li><a href="/about">О нас</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="advertisement">
+        <h1 style="font-size: 50px; font-weight: bold; color: #333;">Мода проходит, ButShip вечен</h1>
+        <div class="slides">
+            {% for image in advertisement_images %}
+            <div class="slide"><img src="{{ url_for('static', filename='Image_reklam/' + image) }}"></div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="recommendations">
+        <h2>Рекомендации</h2>
+        {% for product in recommendations %}
+        <div class="product">
+            <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+            <p>Цена: ${{ product.price }}</p>
+            <form action="/api/cart/add" method="post">
+                <input type="hidden" name="productId" value="{{ product.id }}">
+                <button type="submit">Добавить в корзину</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
