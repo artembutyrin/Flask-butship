@@ -1,13 +1,14 @@
+import os
+import random
+import re
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
-import random
-import os
-import re
+import hashlib
+from flask_ngrok import run_with_ngrok
 
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
+run_with_ngrok(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['UPLOAD_FOLDER_USER_AVATAR'] = 'static/uploads'
 app.config['USER_AVATAR_FOLDER'] = 'static/uploads'
@@ -202,7 +203,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and bcrypt.check_password_hash(user.password, password):
+        if user and user.password == hashlib.sha256(password.encode()).hexdigest():
             resp = redirect(url_for('index'))
             resp.set_cookie('username', username)
             if user.role == 'admin':
@@ -227,7 +228,7 @@ def register():
 
         existing_user = User.query.filter_by(username=username).first()
         if not existing_user:
-            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+            hashed_password = hashlib.sha256(password.encode()).hexdigest()
             new_user = User(username=username, password=hashed_password, role=role)
             db.session.add(new_user)
             db.session.commit()
@@ -251,7 +252,4 @@ def about():
     return render_template('about.html', about_text=about_text)
 
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+app.run()
